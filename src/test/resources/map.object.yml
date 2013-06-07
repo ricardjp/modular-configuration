@@ -1,0 +1,4 @@
+configuration:
+  properties:
+    first: { property: "First property", number: 1 }
+    second: { property: "Second property", number: 2 }

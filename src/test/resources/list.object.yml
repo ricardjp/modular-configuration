@@ -1,0 +1,5 @@
+configuration:
+  properties:
+    - { property: "property 1", number: 8 }
+    - { property: "property 2", number: 12 }
+    - { property: "property 3", number: 3 }

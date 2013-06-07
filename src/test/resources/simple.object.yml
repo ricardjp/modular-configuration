@@ -1,0 +1,4 @@
+configuration:
+    object:
+      property: "foo bar"
+      number: 17

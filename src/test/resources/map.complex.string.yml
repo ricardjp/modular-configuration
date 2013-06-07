@@ -1,0 +1,4 @@
+configuration:
+  properties:
+    first: [ "foo", "bar" ]
+    second: [ "john", "smith" ]
