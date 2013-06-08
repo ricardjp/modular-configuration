@@ -45,7 +45,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testSimpleStringProperty() {
-		ConfigurationParser parser = new ConfigurationParser(converters, SimpleStringPropertyConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(converters, SimpleStringPropertyConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("simple.string.yml"));
 		SimpleStringPropertyConfiguration result = parser.get(SimpleStringPropertyConfiguration.class);
 		assertEquals("foo bar", result.getProperty());
@@ -53,7 +53,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testSimpleConvertedProperty() {
-		ConfigurationParser parser = new ConfigurationParser(converters, SimpleConvertedPropertyConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(converters, SimpleConvertedPropertyConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("simple.converted.yml"));
 		SimpleConvertedPropertyConfiguration result = parser.get(SimpleConvertedPropertyConfiguration.class);
 		assertEquals(Integer.valueOf(7), result.getProperty());
@@ -61,7 +61,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testSimpleObject() {
-		ConfigurationParser parser = new ConfigurationParser(converters, SimpleObjectConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(converters, SimpleObjectConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("simple.object.yml"));
 		SimpleObjectConfiguration result = parser.get(SimpleObjectConfiguration.class);
 		assertEquals("foo bar", result.getObject().getProperty());
@@ -70,7 +70,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testListOfStringProperty() {
-		ConfigurationParser parser = new ConfigurationParser(converters, ListStringConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(converters, ListStringConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("list.string.yml"));
 		ListStringConfiguration result = parser.get(ListStringConfiguration.class);
 		assertTrue(result.getProperties().size() == 3);
@@ -81,7 +81,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testListOfObjectsProperty() {
-		ConfigurationParser parser = new ConfigurationParser(converters, ListObjectConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(converters, ListObjectConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("list.object.yml"));
 		ListObjectConfiguration result = parser.get(ListObjectConfiguration.class);
 		assertTrue(result.getProperties().size() == 3);
@@ -97,7 +97,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testMapOfStringProperty() {
-		ConfigurationParser parser = new ConfigurationParser(converters, MapStringConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(converters, MapStringConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("map.string.yml"));
 		MapStringConfiguration result = parser.get(MapStringConfiguration.class);
 		assertTrue(result.getProperties().size() == 2);
@@ -107,7 +107,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testMapOfObjectProperty() {
-		ConfigurationParser parser = new ConfigurationParser(converters, MapObjectConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(converters, MapObjectConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("map.object.yml"));
 		MapObjectConfiguration result = parser.get(MapObjectConfiguration.class);
 		assertTrue(result.getProperties().size() == 2);
@@ -119,7 +119,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testMapOfStringListProperty() {
-		ConfigurationParser parser = new ConfigurationParser(converters, MapOfListStringConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(converters, MapOfListStringConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("map.complex.string.yml"));
 		MapOfListStringConfiguration result = parser.get(MapOfListStringConfiguration.class);
 		assertTrue(result.getProperties().size() == 2);

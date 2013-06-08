@@ -1,0 +1,18 @@
+employees:
+  directors:
+    - { name: John Smith, age: 47 }
+    - { name: John Doe, age: 38 }
+  
+  engineers:
+    - { name: Jack Smith, age: 34 }
+    - { name: Jane Doe, age: 28 }  
+
+
+geolocation:
+  park:
+    latitude: 45.505174
+    longitude: -73.590202
+  island:
+    latitude: 45.460853
+    longitude: -73.547974 
+  

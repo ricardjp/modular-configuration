@@ -15,6 +15,9 @@
  */
 package com.arcanix.configuration;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,14 +40,18 @@ import com.arcanix.introspection.wrapper.BeanWrapper;
 /**
  * @author ricardjp@arcanix.com (Jean-Philippe Ricard)
  */
-public class ConfigurationParser {
+public final class ModularConfiguration {
 
 	private Map<String, Class<?>> moduleDefinitions = new HashMap<String, Class<?>>();
 	private Map<Class<?>, Object> configurationModulesByType = new HashMap<Class<?>, Object>();
 	
 	private final Converters converters;
 	
-	public ConfigurationParser(final Converters converters, final Class<?>... moduleClasses) {
+	public ModularConfiguration(final Class<?>... moduleClasses) {
+		this(Converters.getDefaultConverters(), moduleClasses);
+	}
+	
+	public ModularConfiguration(final Converters converters, final Class<?>... moduleClasses) {
 		this.converters = converters;
 		for (Class<?> moduleClass : moduleClasses) {
 			String name = moduleClass.getAnnotation(Configuration.class).value();
@@ -52,8 +59,16 @@ public class ConfigurationParser {
 		}
 	}
 	
+	public void load(final String resource) {
+		load(ModularConfiguration.class.getClassLoader().getResourceAsStream(resource));
+	}
+	
+	public void load(final File file) throws FileNotFoundException {
+		load(new FileInputStream(file));
+	}
+	
 	@SuppressWarnings("unchecked")
-	public void load(InputStream inputStream) {
+	public void load(final InputStream inputStream) {
 		Map<String, Map<String, ?>> values = (Map<String, Map<String, ?>>) new Yaml().load(inputStream);
 		
 		BeanUtils beanUtils = new BeanUtils(this.converters);
