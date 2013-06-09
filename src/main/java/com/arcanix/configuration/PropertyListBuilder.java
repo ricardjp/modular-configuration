@@ -105,7 +105,9 @@ public final class PropertyListBuilder {
 						}
 					}
 				} else {
-					if (targetIsBean) {
+					
+					// if map is wrapped in list, treat as a bean
+					if (targetIsBean || property.isIndexed()) {
 						addProperty(appendProperty(expression, key), value);
 					} else {
 						addProperty(appendKey(expression, key), value);

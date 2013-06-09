@@ -18,34 +18,16 @@ package com.arcanix.configuration;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
 import org.junit.Test;
-
-import com.arcanix.convert.BooleanConverter;
-import com.arcanix.convert.Converters;
-import com.arcanix.convert.IntegerConverter;
-import com.arcanix.convert.LongConverter;
-import com.arcanix.convert.StringConverter;
 
 /**
  * @author ricardjp@arcanix.com (Jean-Philippe Ricard)
  */
 public final class TestConfigurationParser {
-
-	private Converters converters;
-	
-	@Before
-	public void initConverters() {
-		this.converters = new Converters();
-		this.converters.add(new BooleanConverter());
-		this.converters.add(new IntegerConverter());
-		this.converters.add(new LongConverter());
-		this.converters.add(new StringConverter());
-	}
 	
 	@Test
 	public void testSimpleStringProperty() {
-		ModularConfiguration parser = new ModularConfiguration(converters, SimpleStringPropertyConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(SimpleStringPropertyConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("simple.string.yml"));
 		SimpleStringPropertyConfiguration result = parser.get(SimpleStringPropertyConfiguration.class);
 		assertEquals("foo bar", result.getProperty());
@@ -53,7 +35,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testSimpleConvertedProperty() {
-		ModularConfiguration parser = new ModularConfiguration(converters, SimpleConvertedPropertyConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(SimpleConvertedPropertyConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("simple.converted.yml"));
 		SimpleConvertedPropertyConfiguration result = parser.get(SimpleConvertedPropertyConfiguration.class);
 		assertEquals(Integer.valueOf(7), result.getProperty());
@@ -61,7 +43,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testSimpleObject() {
-		ModularConfiguration parser = new ModularConfiguration(converters, SimpleObjectConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(SimpleObjectConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("simple.object.yml"));
 		SimpleObjectConfiguration result = parser.get(SimpleObjectConfiguration.class);
 		assertEquals("foo bar", result.getObject().getProperty());
@@ -70,7 +52,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testListOfStringProperty() {
-		ModularConfiguration parser = new ModularConfiguration(converters, ListStringConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(ListStringConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("list.string.yml"));
 		ListStringConfiguration result = parser.get(ListStringConfiguration.class);
 		assertTrue(result.getProperties().size() == 3);
@@ -81,7 +63,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testListOfObjectsProperty() {
-		ModularConfiguration parser = new ModularConfiguration(converters, ListObjectConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(ListObjectConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("list.object.yml"));
 		ListObjectConfiguration result = parser.get(ListObjectConfiguration.class);
 		assertTrue(result.getProperties().size() == 3);
@@ -97,7 +79,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testMapOfStringProperty() {
-		ModularConfiguration parser = new ModularConfiguration(converters, MapStringConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(MapStringConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("map.string.yml"));
 		MapStringConfiguration result = parser.get(MapStringConfiguration.class);
 		assertTrue(result.getProperties().size() == 2);
@@ -107,7 +89,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testMapOfObjectProperty() {
-		ModularConfiguration parser = new ModularConfiguration(converters, MapObjectConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(MapObjectConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("map.object.yml"));
 		MapObjectConfiguration result = parser.get(MapObjectConfiguration.class);
 		assertTrue(result.getProperties().size() == 2);
@@ -119,7 +101,7 @@ public final class TestConfigurationParser {
 	
 	@Test
 	public void testMapOfStringListProperty() {
-		ModularConfiguration parser = new ModularConfiguration(converters, MapOfListStringConfiguration.class);
+		ModularConfiguration parser = new ModularConfiguration(MapOfListStringConfiguration.class);
 		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("map.complex.string.yml"));
 		MapOfListStringConfiguration result = parser.get(MapOfListStringConfiguration.class);
 		assertTrue(result.getProperties().size() == 2);
@@ -127,6 +109,17 @@ public final class TestConfigurationParser {
 		assertEquals("bar", result.getProperties().get("first").get(1));
 		assertEquals("john", result.getProperties().get("second").get(0));
 		assertEquals("smith", result.getProperties().get("second").get(1));
+	}
+	
+	@Test
+	public void testListofMapStringProperty() {
+		ModularConfiguration parser = new ModularConfiguration(ListofMapStringConfiguration.class);
+		parser.load(TestConfigurationParser.class.getClassLoader().getResourceAsStream("list.map.string.yml"));
+		ListofMapStringConfiguration result = parser.get(ListofMapStringConfiguration.class);
+		assertTrue(result.getProperties().size() == 3);
+		assertEquals("1", result.getProperties().get(0).get("id"));
+		assertEquals("3", result.getProperties().get(1).get("id"));
+		assertEquals("18", result.getProperties().get(2).get("id"));
 	}
 	
 }
