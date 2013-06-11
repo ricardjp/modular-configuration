@@ -19,12 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.arcanix.convert.Converters;
 import com.arcanix.introspection.Property;
 import com.arcanix.introspection.PropertyResolver;
-import com.arcanix.introspection.util.ReflectionUtils;
-import com.arcanix.introspection.wrapper.BeanWrapper;
-import com.arcanix.introspection.wrapper.PropertyWrapper;
 import com.arcanix.introspection.wrapper.PropertyWrapperFactory;
 
 /**
@@ -34,18 +30,9 @@ public final class PropertyListBuilder {
 
 	private final PropertyResolver propertyResolver = new PropertyResolver();
 	
-	private final Converters converters;
-	private final BeanWrapper beanWrapper;
-	
 	private List<Property> properties = new ArrayList<>();
 	
-	public PropertyListBuilder(
-			final Converters converters,
-			final BeanWrapper beanWrapper,
-			final Map<String, ?> values) {
-		
-		this.converters = converters;
-		this.beanWrapper = beanWrapper;
+	public PropertyListBuilder(final Map<String, ?> values) {
 		convertToNestedProperties(values);
 	}
 	
@@ -59,7 +46,7 @@ public final class PropertyListBuilder {
 			Object value = entry.getValue();
 			
 			if (PropertyWrapperFactory.isWrapperType(value.getClass())) {
-				buildNestedProperties(this.beanWrapper, key, value);
+				buildNestedProperties(key, value);
 			} else {
 				addProperty(key, value);
 			}
@@ -67,51 +54,27 @@ public final class PropertyListBuilder {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void buildNestedProperties(
-			final PropertyWrapper propertyWrapper,
-			final String expression,
-			final Object values) {
-		
-		Property property = this.propertyResolver.resolve(expression);
-		PropertyWrapper wrapper = PropertyWrapperFactory.getPropertyWrapper(
-				propertyWrapper.getPropertyType(property), this.converters);
-		
+	private void buildNestedProperties(final String expression, final Object values) {
 		if (values instanceof Map) {
 			Map<String, ?> mappedValues = (Map<String, ?>) values;
-			Class<?> targetClass = ReflectionUtils.getClass(propertyWrapper.getPropertyType(property));
 
-			boolean targetIsBean = true;
-			if (targetClass.isAssignableFrom(Map.class)) {
-				targetIsBean = false;
-			}
-			
 			for (Map.Entry<String, ?> entry : mappedValues.entrySet()) {
 				String key = entry.getKey();
 				Object value = entry.getValue();
 				
 				if (value instanceof Map) {
-					if (targetIsBean) {
-						buildNestedProperties(wrapper, appendProperty(expression, key), value);
-					} else {
-						buildNestedProperties(wrapper, appendKey(expression, key), value);
-					}
+					buildNestedProperties(appendProperty(expression, key), value);
 				} else if (value instanceof List) {
 					List<?> indexedValues = (List<?>) value;
 					for (Object listValue : indexedValues) {
 						if (value instanceof Map) {
-							buildNestedProperties(wrapper, appendKey(expression, key), listValue);
+							buildNestedProperties(appendKey(expression, key), listValue);
 						} else {
 							addProperty(appendKey(expression, key), listValue);
 						}
 					}
 				} else {
-					
-					// if map is wrapped in list, treat as a bean
-					if (targetIsBean || property.isIndexed()) {
-						addProperty(appendProperty(expression, key), value);
-					} else {
-						addProperty(appendKey(expression, key), value);
-					}
+					addProperty(appendProperty(expression, key), value);
 				}
 			}
 		} else if (values instanceof List) {
@@ -119,7 +82,7 @@ public final class PropertyListBuilder {
 			int index = 0;
 			for (Object value : indexedValues) {
 				if (value instanceof Map) {
-					buildNestedProperties(wrapper, appendIndex(expression, index), value);
+					buildNestedProperties(appendIndex(expression, index), value);
 				} else {
 					addProperty(appendIndex(expression, index), value);
 				}

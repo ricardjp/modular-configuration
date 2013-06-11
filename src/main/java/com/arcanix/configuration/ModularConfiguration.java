@@ -82,8 +82,7 @@ public final class ModularConfiguration {
 				BeanWrapper beanWrapper = new BeanWrapper(null, moduleClass, this.converters);
 				Object module = beanWrapper.getResult();
 				
-				PropertyListBuilder builder = new PropertyListBuilder(
-						this.converters, beanWrapper, entriesByModule.getValue());
+				PropertyListBuilder builder = new PropertyListBuilder(entriesByModule.getValue());
 				
 				for (Property property : builder.getNestedProperties()) {
 					try {
