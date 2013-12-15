@@ -94,7 +94,7 @@ public final class PropertyListBuilder {
 	}
 	
 	private void addProperty(final String expression, final Object value) {
-		this.properties.add(this.propertyResolver.resolveNestedProperty(expression, value.toString()));
+		this.properties.add(this.propertyResolver.resolve(expression, value.toString()));
 	}
 	
 	private String appendIndex(final String expression, final int index) {
