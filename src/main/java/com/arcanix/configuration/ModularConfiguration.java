@@ -42,8 +42,8 @@ import com.arcanix.introspection.wrapper.BeanWrapper;
  */
 public final class ModularConfiguration {
 
-	private Map<String, Class<?>> moduleDefinitions = new HashMap<String, Class<?>>();
-	private Map<Class<?>, Object> configurationModulesByType = new HashMap<Class<?>, Object>();
+	private Map<String, Class<?>> moduleDefinitions = new HashMap<>();
+	private Map<Class<?>, Object> configurationModulesByType = new HashMap<>();
 	
 	private final Converters converters;
 	

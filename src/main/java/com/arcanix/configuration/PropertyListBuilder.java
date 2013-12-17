@@ -67,7 +67,7 @@ public final class PropertyListBuilder {
 				} else if (value instanceof List) {
 					List<?> indexedValues = (List<?>) value;
 					for (Object listValue : indexedValues) {
-						if (value instanceof Map) {
+						if (listValue instanceof Map) {
 							buildNestedProperties(appendKey(expression, key), listValue);
 						} else {
 							addProperty(appendKey(expression, key), listValue);
@@ -94,7 +94,7 @@ public final class PropertyListBuilder {
 	}
 	
 	private void addProperty(final String expression, final Object value) {
-		this.properties.add(this.propertyResolver.resolveNestedProperty(expression, value.toString()));
+		this.properties.add(this.propertyResolver.resolve(expression, value.toString()));
 	}
 	
 	private String appendIndex(final String expression, final int index) {
